@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -12,22 +12,26 @@ export class ReservationService {
     movieName: string,
     date: Date,
   ) {
-    const twoHoursBefore = new Date(date.getTime() - 1 * 60 * 60 + 59 * 60 + 59 * 1000);
-    const twoHoursAfter = new Date(date.getTime() + 1 * 60 * 60 + 59 * 60 + 59 * 1000);
+    const reservationDate = new Date(date);
+
+    const timeInterval = 119 * 60 * 1000;
+    const startDate = new Date(reservationDate.getTime() - timeInterval);
+    const endDate = new Date(reservationDate.getTime() + timeInterval);
 
     const existingReservation = await this.prisma.reservartion.findFirst({
       where: {
         userId: user.id,
         date: {
-          gte: twoHoursBefore,
-          lte: twoHoursAfter,
+          gte: startDate,
+          lte: endDate,
         },
       },
     });
-
+    
     if (existingReservation) {
+      const existingDate = new Date(existingReservation.date);
       throw new Error(
-        'Vous avez déjà une réservation dans un interval de 2 heures',
+        `Vous avez déjà une réservation le ${existingDate.toLocaleDateString()} à ${existingDate.toLocaleTimeString()}. Un délai de 1h59 est requis entre deux séances.`,
       );
     }
 
@@ -36,7 +40,7 @@ export class ReservationService {
         userId: user.id,
         movieId: movieId,
         movieName: movieName,
-        date: date,
+        date: reservationDate,
       },
     });
   }
@@ -62,14 +66,25 @@ export class ReservationService {
     });
 
     if(!reservation) {
-        throw new Error('Réservation non trouvé')
+      throw new Error('Réservation non trouvée');
     }
 
     await this.prisma.reservartion.delete({
-        where : {id : reservationId}
-    })
+      where: { id: reservationId }
+    });
 
-    return 'Réservation annulé'
+    return { message: 'Réservation annulée' };
+  }
 
+  async getReservationById(id: number) {
+    const reservation = await this.prisma.reservartion.findUnique({
+      where: { id },
+    });
+
+    if (!reservation) {
+      throw new NotFoundException(`Réservation #${id} non trouvée`);
+    }
+
+    return reservation;
   }
 }

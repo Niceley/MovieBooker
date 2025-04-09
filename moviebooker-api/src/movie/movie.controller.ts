@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { MovieService } from './movie.service';
 
@@ -22,10 +22,9 @@ export class MovieController {
         return this.movieService.searchMovie(query, page)
     }
 
-    @Get('detail')
+    @Get('detail/:id')
     @ApiOperation({ summary: "Récupère les détails d'un film" })
-    @ApiQuery({ name: 'id', required: true, type: Number, description: 'ID du film' })
-    async getMovieDetails(@Query('id') id: number) {
+    async getMovieDetails(@Param('id') id: number) {
         return this.movieService.getMovieDetails(id)
     }
 
