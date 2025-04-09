@@ -1,7 +1,6 @@
 # Ignore les fichiers de l'API
 /moviebooker-api/dist
 /moviebooker-api/node_modules
-/moviebooker-api/.env
 /moviebooker-api/prisma/migrations
 /moviebooker-api/prisma/*.db
 

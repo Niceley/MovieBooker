@@ -41,11 +41,6 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
-# Environment variables
-.env
-.env.*
-!.env.example
-
 # Temporary files
 .temp
 .tmp
@@ -88,8 +83,3 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variables file
-.env
-.env.test
-.env.production
