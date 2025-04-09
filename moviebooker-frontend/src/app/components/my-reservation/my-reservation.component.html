@@ -1,0 +1,56 @@
+<div class="my-reservations-container">
+  <h1>Mes Réservations</h1>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>Chargement de vos réservations...</p>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+  </div>
+
+  <div class="success-message" *ngIf="successMessage">
+    <i class="fas fa-check-circle"></i>
+    <p>{{ successMessage }}</p>
+  </div>
+
+  <div class="no-reservations" *ngIf="!loading && !error && reservations.length === 0">
+    <i class="fas fa-ticket-alt"></i>
+    <p>Vous n'avez pas encore de réservations.</p>
+    <a routerLink="/" class="btn-primary">Découvrir les films</a>
+  </div>
+
+  <div class="reservations-grid" *ngIf="!loading && !error && reservations.length > 0">
+    <div class="reservation-card" *ngFor="let reservation of reservations">
+      <div class="movie-poster">
+        <img *ngIf="reservation.moviePoster" 
+             [src]="'https://image.tmdb.org/t/p/w200' + reservation.moviePoster" 
+             [alt]="reservation.movieName">
+        <div *ngIf="!reservation.moviePoster" class="no-poster">
+          <i class="fas fa-film"></i>
+        </div>
+      </div>
+
+      <div class="reservation-details">
+        <h3>{{ reservation.movieName }}</h3>
+        <p class="date">
+          <i class="far fa-calendar-alt"></i>
+          {{ formatDate(reservation.date) }}
+        </p>
+        
+        <div class="actions">
+          <button class="btn-cancel" (click)="cancelReservation(reservation.id)">
+            <i class="fas fa-times"></i>
+            Annuler
+          </button>
+          <a [routerLink]="['/movie', reservation.movieId]" class="btn-details">
+            <i class="fas fa-info-circle"></i>
+            Détails du film
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

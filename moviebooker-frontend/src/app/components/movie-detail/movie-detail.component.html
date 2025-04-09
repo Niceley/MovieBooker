@@ -1,0 +1,60 @@
+<div class="movie-detail-container" *ngIf="!loading && movie">
+  <div class="movie-backdrop" *ngIf="movie.backdrop_path">
+    <img [src]="'https://image.tmdb.org/t/p/original' + movie.backdrop_path" [alt]="movie.title">
+    <div class="backdrop-overlay"></div>
+  </div>
+
+  <div class="movie-content">
+    <div class="movie-poster">
+      <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title">
+    </div>
+
+    <div class="movie-info">
+      <h1 class="movie-title">{{ movie.title }}</h1>
+      
+      <div class="movie-meta">
+        <span class="release-date">{{ getFormattedDate() }}</span>
+        <span class="runtime">{{ getFormattedRuntime() }}</span>
+        <span class="rating">
+          <i class="fas fa-star"></i>
+          {{ movie.vote_average | number:'1.1-1' }}/10
+        </span>
+      </div>
+
+      <div class="genres">
+        <span *ngFor="let genre of movie.genres" class="genre-tag">
+          {{ genre.name }}
+        </span>
+      </div>
+
+      <div class="movie-overview">
+        <h2>Synopsis</h2>
+        <p>{{ movie.overview }}</p>
+      </div>
+
+      <div class="production-companies" *ngIf="movie.production_companies?.length">
+        <h2>Production</h2>
+        <div class="companies-list">
+          <div *ngFor="let company of movie.production_companies" class="company">
+            <img *ngIf="company.logo_path" 
+                 [src]="'https://image.tmdb.org/t/p/w200' + company.logo_path" 
+                 [alt]="company.name"
+                 class="company-logo">
+            <span *ngIf="!company.logo_path" class="company-name">{{ company.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="book-button" [routerLink]="['/reservation', movie.id, movie.title]">
+          <i class="fas fa-ticket-alt"></i>
+          Réserver
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-spinner" *ngIf="loading">
+  <i class="fas fa-spinner fa-spin"></i>
+</div>

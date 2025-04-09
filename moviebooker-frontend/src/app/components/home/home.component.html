@@ -1,0 +1,56 @@
+<div class="home-container">
+  <div class="hero-section">
+    <h1>Bienvenue sur MovieBooker</h1>
+    <p>Découvrez les films à l'affiche et réservez vos places en ligne</p>
+  </div>
+
+  <div class="movies-section">
+    <h2>Films à l'affiche</h2>
+    <div class="movies-grid">
+      <div *ngFor="let movie of movies" class="movie-card">
+        <div class="movie-poster-container">
+          <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title" class="movie-poster">
+          <div class="movie-actions">
+            <button class="action-button details-button" (click)="viewDetails(movie.id)">
+              <i class="fas fa-info-circle"></i>
+              En savoir plus
+            </button>
+            <button class="action-button book-button" [routerLink]="['/reservation', movie.id, movie.title]">
+              <i class="fas fa-ticket-alt"></i>
+              Réserver
+            </button>
+          </div>
+        </div>
+        <h3 class="movie-title">{{ movie.title }}</h3>
+        <div class="movie-rating">
+          <span class="rating-value">{{ movie.vote_average | number:'1.1-1' }}</span>
+          <span class="rating-max">/10</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button 
+        class="pagination-button" 
+        [disabled]="currentPage === 1"
+        (click)="previousPage()">
+        &laquo; Précédent
+      </button>
+      
+      <button 
+        *ngFor="let page of getPageNumbers()" 
+        class="pagination-button"
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+      
+      <button 
+        class="pagination-button"
+        [disabled]="currentPage === totalPages"
+        (click)="nextPage()">
+        Suivant &raquo;
+      </button>
+    </div>
+  </div>
+</div>

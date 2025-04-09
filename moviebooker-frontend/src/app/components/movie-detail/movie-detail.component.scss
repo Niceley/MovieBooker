@@ -1,0 +1,181 @@
+.movie-detail-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.movie-backdrop {
+  position: relative;
+  height: 60vh;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .backdrop-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+  }
+}
+
+.movie-content {
+  max-width: 1200px;
+  margin: -100px auto 0;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    margin-top: 0;
+  }
+}
+
+.movie-poster {
+  img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.movie-info {
+  color: #333;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.movie-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.movie-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #666;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    i {
+      color: #ffd700;
+    }
+  }
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.genre-tag {
+  background-color: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.movie-overview {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #222;
+  }
+
+  p {
+    line-height: 1.6;
+    color: #444;
+  }
+}
+
+.production-companies {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #222;
+  }
+}
+
+.companies-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.company {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+
+  .company-logo {
+    height: 30px;
+    object-fit: contain;
+  }
+
+  .company-name {
+    font-size: 0.9rem;
+    color: #666;
+  }
+}
+
+.action-buttons {
+  margin-top: 2rem;
+}
+
+.book-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 3rem;
+  color: #007bff;
+}
