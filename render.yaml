@@ -1,0 +1,35 @@
+services:
+  # Backend Service
+  - type: web
+    name: moviebooker-api
+    env: node
+    buildCommand: cd moviebooker-api && npm install && npm run build
+    startCommand: cd moviebooker-api && npm run start:prod
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: moviebooker-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+  # Frontend Service
+  - type: web
+    name: moviebooker-frontend
+    env: node
+    buildCommand: cd moviebooker-frontend && npm install && npm run build -- --configuration=production
+    startCommand: cd moviebooker-frontend && npm run start
+    envVars:
+      - key: API_URL
+        value: https://moviebooker-api.onrender.com
+    autoDeploy: true
+
+databases:
+  - name: moviebooker-db
+    databaseName: moviebooker
+    user: moviebooker
+    plan: free 
