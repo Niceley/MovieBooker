@@ -2,10 +2,23 @@
   <div class="hero-section">
     <h1>Bienvenue sur MovieBooker</h1>
     <p>Découvrez les films à l'affiche et réservez vos places en ligne</p>
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        (ngModelChange)="onSearch($event)"
+        placeholder="Rechercher un film..."
+        class="search-input"
+      >
+      <div *ngIf="isSearching" class="search-status">Recherche en cours...</div>
+    </div>
   </div>
 
   <div class="movies-section">
-    <h2>Films à l'affiche</h2>
+    <h2>{{ searchQuery ? 'Résultats de la recherche' : 'Films à l\'affiche' }}</h2>
+    <div *ngIf="movies.length === 0" class="no-results">
+      Aucun film trouvé.
+    </div>
     <div class="movies-grid">
       <div *ngFor="let movie of movies" class="movie-card">
         <div class="movie-poster-container">
