@@ -26,10 +26,7 @@ services:
       /**:
         - key: Cache-Control
           value: no-store, no-cache
-    routes:
-      - type: rewrite
-        source: /**
-        destination: /index.html
+    spa: true
     envVars:
       - key: API_URL
         value: https://moviebooker-api.onrender.com
