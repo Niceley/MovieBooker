@@ -17,16 +17,17 @@ services:
     healthCheckPath: /api/health
     autoDeploy: true
 
-  # Frontend Service
-  - type: web
+  # Frontend Service (Static Site)
+  - type: static
     name: moviebooker-frontend
-    env: node
-    buildCommand: cd moviebooker-frontend && npm install && npm run build -- --configuration=production
-    startCommand: cd moviebooker-frontend && npm run start
+    buildCommand: cd moviebooker-frontend && npm install && npm run build
+    publishDirectory: moviebooker-frontend/dist/moviebooker-frontend
+    routes:
+      - source: /*
+        destination: /index.html
     envVars:
       - key: API_URL
         value: https://moviebooker-api.onrender.com
-    autoDeploy: true
 
 databases:
   - name: moviebooker-db
