@@ -23,6 +23,8 @@ services:
     buildCommand: cd moviebooker-frontend && npm install && npm run build
     publishDirectory: moviebooker-frontend/dist/moviebooker-frontend
     routes:
+      - source: /assets/*
+        destination: /assets/*
       - source: /*
         destination: /index.html
     envVars:
