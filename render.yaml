@@ -20,8 +20,8 @@ services:
   # Frontend Service (Static Site)
   - type: static
     name: moviebooker-frontend
-    buildCommand: cd moviebooker-frontend && npm install && npm run build -- --configuration production
-    publishDirectory: moviebooker-frontend/dist/moviebooker-frontend/browser
+    buildCommand: cd moviebooker-frontend && npm install && npm run build
+    publishDirectory: moviebooker-frontend/dist/moviebooker-frontend
     routes:
       - source: /*
         destination: /index.html
