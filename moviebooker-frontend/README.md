@@ -1,59 +1,117 @@
-# MoviebookerFrontend
+# MovieBooker Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+Interface utilisateur du projet MovieBooker développée avec Angular 19.
 
-## Development server
+## 🌐 URL de Production
 
-To start a local development server, run:
+[https://movie-booker-beta.vercel.app/](https://movie-booker-beta.vercel.app/)
+
+## 🚀 Installation et Démarrage
 
 ```bash
+# Installation des dépendances
+npm install
+
+# Démarrage du serveur de développement
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
+# Construction du projet
 ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
+# Exécution des tests unitaires
 ng test
 ```
 
-## Running end-to-end tests
+L'application sera accessible sur `http://localhost:4200/`
 
-For end-to-end (e2e) testing, run:
+## 📱 Fonctionnalités
 
-```bash
-ng e2e
+- **Authentification**
+  - Connexion/Inscription
+  - Gestion du profil utilisateur
+
+- **Gestion des Films**
+  - Liste des films disponibles
+  - Détails des films
+  - Recherche et filtrage
+
+- **Réservations**
+  - Sélection des séances
+  - Choix des places
+  - Historique des réservations
+
+- **Interface Administrateur**
+  - Gestion des films
+  - Gestion des séances
+  - Gestion des salles
+
+## 🛠 Structure du Projet
+
+```
+src/
+├── app/
+│   ├── components/     # Composants réutilisables
+│   ├── pages/         # Pages principales
+│   ├── services/      # Services d'API et utilitaires
+│   ├── models/        # Interfaces et types
+│   ├── guards/        # Guards d'authentification
+│   └── shared/        # Éléments partagés
+├── assets/           # Images et ressources statiques
+└── environments/     # Configuration des environnements
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🔧 Configuration
 
-## Additional Resources
+### Variables d'Environnement
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+`src/environments/environment.ts` :
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000'
+};
+```
+
+`src/environments/environment.prod.ts` :
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://moviebooker-api.onrender.com'
+};
+```
+
+## 📚 Commandes Angular CLI
+
+```bash
+# Générer un nouveau composant
+ng generate component nom-composant
+
+# Générer un service
+ng generate service nom-service
+
+# Générer un guard
+ng generate guard nom-guard
+
+# Générer une interface
+ng generate interface nom-interface
+```
+
+## 🎨 Style et Design
+
+- Utilisation de SCSS pour les styles
+- Design responsive
+- Thème personnalisable
+- Composants Material Design
+
+## 📦 Dépendances Principales
+
+- Angular 19
+- Angular Material
+- RxJS
+- JWT Decode
+
+## 🔗 Liens Utiles
+
+- [Documentation Angular](https://angular.dev/)
+- [Angular Material](https://material.angular.io/)
+- [Documentation API Backend](https://moviebooker-api.onrender.com/documentation)
