@@ -22,9 +22,11 @@ services:
     name: moviebooker-frontend
     buildCommand: cd moviebooker-frontend && npm install && npm run build
     publishDirectory: moviebooker-frontend/dist/moviebooker-frontend
-    routes:
-      - source: /*
-        destination: /index.html
+    headers:
+      /**:
+        - key: Cache-Control
+          value: no-store, no-cache
+    spa: true
     envVars:
       - key: API_URL
         value: https://moviebooker-api.onrender.com
