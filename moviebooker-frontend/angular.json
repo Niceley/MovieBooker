@@ -15,24 +15,30 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/moviebooker-frontend",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "baseHref": "/",
-            "deployUrl": "/",
+            "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets/"
+              },
               {
                 "glob": "_redirects",
                 "input": "src/assets",
+                "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "public",
                 "output": "/"
               }
             ],
@@ -58,7 +64,6 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildTarget": "moviebooker-frontend:build:development",
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -91,8 +96,10 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
             ],
             "styles": [
               "src/styles.scss"
