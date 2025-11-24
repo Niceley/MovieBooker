@@ -10,10 +10,12 @@ import { MovieModule } from './movie/movie.module';
 import { HttpModule } from '@nestjs/axios';
 import { ReservationModule } from './reservation/reservation.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AvisService } from './avis/avis.service';
+import { AvisController } from './avis/avis.controller';
 
 @Module({
   imports: [AuthModule, UsersModule, MovieModule, HttpModule, ReservationModule, PrismaModule],
-  controllers: [AppController, MovieController],
-  providers: [AppService, UsersService, MovieService],
+  controllers: [AppController, MovieController, AvisController],
+  providers: [AppService, UsersService, MovieService, AvisService],
 })
 export class AppModule {}

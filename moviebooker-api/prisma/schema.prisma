@@ -14,20 +14,34 @@ datasource db {
 }
 
 model User {
-  id Int @default(autoincrement()) @id
-  lastName String
-  firstName String  
-  email String @unique
-  password String
-  Reservartion Reservartion[]
+  id         Int          @default(autoincrement()) @id
+  lastName   String
+  firstName  String
+  email      String       @unique
+  password   String
+  reservations Reservation[] @relation("UserReservations")
+  avis          Avis[]        @relation("UserAvis")
 }
 
-model Reservartion {
+model Reservation {
   id Int @default(autoincrement()) @id
   createdAt DateTime  @default(now())
-  User User? @relation(fields : [userId], references: [id])
+  updatedAt DateTime @updatedAt
+  user User? @relation("UserReservations", fields : [userId], references: [id])
   userId Int?
   movieId Int
   movieName String
   date DateTime
+}
+
+model Avis {
+  id Int @default(autoincrement()) @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime @updatedAt
+  user User? @relation("UserAvis", fields : [userId], references: [id])
+  userId Int?
+  movieId Int
+  movieName String
+  note Float
+  commentaire String
 }

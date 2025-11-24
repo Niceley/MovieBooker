@@ -18,10 +18,23 @@ export interface MovieDetails {
     production_companies: { name: string; logo_path: string }[];
 }
 
+export interface Avis {
+    id: number;
+    userId: number;
+    movieId: number;
+    movieName: string;
+    note: number;
+    commentaire: string;
+    createdAt: string;
+    updatedAt: string;
+    userFirstName?: string;
+    userLastName?: string;
+}
+
 export interface MovieResponse {
     results: Movie[];
     page: number;
     total_pages: number;
     total_results: number;
-  }
+}
   

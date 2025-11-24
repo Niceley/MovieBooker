@@ -16,7 +16,7 @@ describe('ReservationService', () => {
   };
 
   const mockPrismaService = {
-    reservartion: {
+    reservation: {
       findFirst: jest.fn(),
       create: jest.fn(),
       findMany: jest.fn(),
@@ -52,8 +52,8 @@ describe('ReservationService', () => {
     };
 
     it('should create a new reservation', async () => {
-      mockPrismaService.reservartion.findFirst.mockResolvedValue(null);
-      mockPrismaService.reservartion.create.mockResolvedValue({
+      mockPrismaService.reservation.findFirst.mockResolvedValue(null);
+      mockPrismaService.reservation.create.mockResolvedValue({
         id: 1,
         userId: mockUser.id,
         ...reservationData,
@@ -82,7 +82,7 @@ describe('ReservationService', () => {
         date: new Date('2024-04-10T16:00:00Z'),
       };
 
-      mockPrismaService.reservartion.findFirst.mockResolvedValue(existingReservation);
+      mockPrismaService.reservation.findFirst.mockResolvedValue(existingReservation);
 
       await expect(
         service.reserveMovie(
@@ -107,19 +107,19 @@ describe('ReservationService', () => {
         },
       ];
 
-      mockPrismaService.reservartion.findMany.mockResolvedValue(mockReservations);
+      mockPrismaService.reservation.findMany.mockResolvedValue(mockReservations);
 
       const result = await service.getUserReservations(mockUser);
 
       expect(result).toEqual(mockReservations);
-      expect(prismaService.reservartion.findMany).toHaveBeenCalledWith({
+      expect(prismaService.reservation.findMany).toHaveBeenCalledWith({
         where: { userId: mockUser.id },
         orderBy: { date: 'asc' },
       });
     });
 
     it('should throw error if database query fails', async () => {
-      mockPrismaService.reservartion.findMany.mockRejectedValue(new Error());
+      mockPrismaService.reservation.findMany.mockRejectedValue(new Error());
 
       await expect(service.getUserReservations(mockUser)).rejects.toThrow(
         'Erreur lors de la récupération des réservations',
@@ -138,20 +138,20 @@ describe('ReservationService', () => {
         date: new Date('2024-04-10T15:00:00Z'),
       };
 
-      mockPrismaService.reservartion.findUnique.mockResolvedValue(mockReservation);
-      mockPrismaService.reservartion.delete.mockResolvedValue(mockReservation);
+      mockPrismaService.reservation.findUnique.mockResolvedValue(mockReservation);
+      mockPrismaService.reservation.delete.mockResolvedValue(mockReservation);
 
       const result = await service.cancelReservation(reservationId);
 
       expect(result).toEqual({ message: 'Réservation annulée' });
-      expect(prismaService.reservartion.delete).toHaveBeenCalledWith({
+      expect(prismaService.reservation.delete).toHaveBeenCalledWith({
         where: { id: reservationId },
       });
     });
 
     it('should throw error if reservation not found', async () => {
       const reservationId = 1;
-      mockPrismaService.reservartion.findUnique.mockResolvedValue(null);
+      mockPrismaService.reservation.findUnique.mockResolvedValue(null);
 
       await expect(service.cancelReservation(reservationId)).rejects.toThrow(
         'Réservation non trouvée',
@@ -170,19 +170,19 @@ describe('ReservationService', () => {
         date: new Date('2024-04-10T15:00:00Z'),
       };
 
-      mockPrismaService.reservartion.findUnique.mockResolvedValue(mockReservation);
+      mockPrismaService.reservation.findUnique.mockResolvedValue(mockReservation);
 
       const result = await service.getReservationById(reservationId);
 
       expect(result).toEqual(mockReservation);
-      expect(prismaService.reservartion.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.reservation.findUnique).toHaveBeenCalledWith({
         where: { id: reservationId },
       });
     });
 
     it('should throw NotFoundException if reservation not found', async () => {
       const reservationId = 1;
-      mockPrismaService.reservartion.findUnique.mockResolvedValue(null);
+      mockPrismaService.reservation.findUnique.mockResolvedValue(null);
 
       await expect(service.getReservationById(reservationId)).rejects.toThrow(
         NotFoundException,

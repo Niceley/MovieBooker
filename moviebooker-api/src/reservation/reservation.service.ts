@@ -18,7 +18,7 @@ export class ReservationService {
     const startDate = new Date(reservationDate.getTime() - timeInterval);
     const endDate = new Date(reservationDate.getTime() + timeInterval);
 
-    const existingReservation = await this.prisma.reservartion.findFirst({
+    const existingReservation = await this.prisma.reservation.findFirst({
       where: {
         userId: user.id,
         date: {
@@ -35,7 +35,7 @@ export class ReservationService {
       );
     }
 
-    return this.prisma.reservartion.create({
+    return this.prisma.reservation.create({
       data: {
         userId: user.id,
         movieId: movieId,
@@ -47,7 +47,7 @@ export class ReservationService {
 
   async getUserReservations(user: User) {
     try {
-      return await this.prisma.reservartion.findMany({
+      return await this.prisma.reservation.findMany({
         where: {
           userId: user.id,
         },
@@ -61,7 +61,7 @@ export class ReservationService {
   }
 
   async cancelReservation(reservationId: number) {
-    const reservation = await this.prisma.reservartion.findUnique({
+    const reservation = await this.prisma.reservation.findUnique({
       where: { id: reservationId },
     });
 
@@ -69,7 +69,7 @@ export class ReservationService {
       throw new Error('Réservation non trouvée');
     }
 
-    await this.prisma.reservartion.delete({
+    await this.prisma.reservation.delete({
       where: { id: reservationId }
     });
 
@@ -77,7 +77,7 @@ export class ReservationService {
   }
 
   async getReservationById(id: number) {
-    const reservation = await this.prisma.reservartion.findUnique({
+    const reservation = await this.prisma.reservation.findUnique({
       where: { id },
     });
 

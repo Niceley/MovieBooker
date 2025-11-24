@@ -58,7 +58,6 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildTarget": "moviebooker-frontend:build:development",
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true

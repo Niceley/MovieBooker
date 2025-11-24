@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 
 interface UserInfo {
+  id: number;
   firstName: string;
   lastName: string;
 }
@@ -55,18 +56,37 @@ export class LoginService {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  getCurrentUserId(): number | null {
+    const token = this.getToken();
+    if (!token) {
+      return null;
+    }
+
+    const decodedToken = this.decodeToken(token);
+    return decodedToken?.sub ?? null;
+  }
+
   private updateUserInfo(token: string): void {
+    const decodedToken = this.decodeToken(token);
+
+    if (decodedToken?.firstName && decodedToken?.lastName && decodedToken?.sub) {
+      this.userInfoSubject.next({
+        id: decodedToken.sub,
+        firstName: decodedToken.firstName,
+        lastName: decodedToken.lastName
+      });
+      return;
+    }
+
+    this.userInfoSubject.next(null);
+  }
+
+  private decodeToken(token: string): any | null {
     try {
-      const decodedToken: any = jwtDecode(token);
-      if (decodedToken.firstName && decodedToken.lastName) {
-        this.userInfoSubject.next({
-          firstName: decodedToken.firstName,
-          lastName: decodedToken.lastName
-        });
-      }
+      return jwtDecode(token);
     } catch (error) {
       console.error('Erreur lors du décodage du token:', error);
-      this.userInfoSubject.next(null);
+      return null;
     }
   }
 }

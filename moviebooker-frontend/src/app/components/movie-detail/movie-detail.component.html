@@ -58,3 +58,140 @@
 <div class="loading-spinner" *ngIf="loading">
   <i class="fas fa-spinner fa-spin"></i>
 </div>
+
+<div class="avis-section" *ngIf="movie">
+  <div class="avis-section-header">
+    <div>
+      <h2>Avis des spectateurs</h2>
+      <p *ngIf="avisList.length">{{ avisList.length }} avis publiés</p>
+    </div>
+    <div class="average-note" *ngIf="avisList.length">
+      <i class="fas fa-star"></i>
+      {{ getAverageNote() }}/5
+    </div>
+  </div>
+
+  <div class="loading-spinner avis-loading" *ngIf="avisLoading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
+  <ng-container *ngIf="!avisLoading">
+    <div class="avis-list" *ngIf="avisList.length; else emptyAvis">
+      <article
+        *ngFor="let avisItem of avisList; trackBy: trackAvisById"
+        class="avis-card"
+        [class.avis-card--self]="avisItem.id === userReview?.id"
+      >
+        <header class="avis-card-header">
+          <span class="avis-author">
+            <i class="fas fa-user-circle"></i>
+            {{
+              avisItem.id === userReview?.id
+                ? 'Vous'
+                : (avisItem.userFirstName || 'Utilisateur')
+            }}
+          </span>
+          <span class="avis-note">
+            <i class="fas fa-star"></i>
+            {{ avisItem.note }}/5
+          </span>
+        </header>
+        <p class="avis-commentaire">{{ avisItem.commentaire }}</p>
+        <footer class="avis-card-footer">
+          <span class="avis-date">
+            Mis à jour le {{ avisItem.updatedAt | date: 'shortDate' }}
+          </span>
+        </footer>
+      </article>
+    </div>
+    <ng-template #emptyAvis>
+      <p class="empty-state">
+        Soyez le premier à donner votre avis sur le film !
+      </p>
+    </ng-template>
+  </ng-container>
+
+  <div class="avis-form-wrapper">
+    <ng-container *ngIf="isLoggedIn; else guestAvisMessage">
+      <section *ngIf="userReview && !isEditing" class="user-review-card">
+        <div class="user-review-header">
+          <h3>
+            {{ userReview.userFirstName ? 'Avis de ' + userReview.userFirstName : 'Votre avis' }}
+          </h3>
+          <span class="avis-note">
+            <i class="fas fa-star"></i>
+            {{ userReview.note }}/5
+          </span>
+        </div>
+        <p>{{ userReview.commentaire }}</p>
+        <div class="user-review-actions">
+          <button type="button" class="btn-secondary" (click)="startEdit()">Modifier</button>
+          <button
+            type="button"
+            class="btn-danger"
+            [disabled]="submitting"
+            (click)="deleteReview(userReview.id)"
+          >
+            Supprimer
+          </button>
+        </div>
+      </section>
+
+      <section *ngIf="!userReview || isEditing" class="avis-form">
+        <h3>{{ userReview ? 'Modifier votre avis' : 'Ajouter un avis' }}</h3>
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+          <div class="form-group">
+            <label for="note">Note (0 à 5)</label>
+            <input
+              id="note"
+              type="number"
+              formControlName="note"
+              min="0"
+              max="5"
+              step="0.5"
+            />
+            <small class="error" *ngIf="reviewForm.get('note')?.touched && reviewForm.get('note')?.invalid">
+              La note doit être comprise entre 0 et 5.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="commentaire">Commentaire</label>
+            <textarea
+              id="commentaire"
+              rows="4"
+              formControlName="commentaire"
+              placeholder="Partagez votre ressenti..."
+            ></textarea>
+            <small class="error" *ngIf="reviewForm.get('commentaire')?.touched && reviewForm.get('commentaire')?.invalid">
+              Le commentaire est requis (1000 caractères max).
+            </small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" [disabled]="reviewForm.invalid || submitting">
+              {{ userReview ? 'Mettre à jour mon avis' : 'Publier mon avis' }}
+            </button>
+            <button
+              type="button"
+              *ngIf="isEditing"
+              class="btn-secondary"
+              (click)="cancelEdit()"
+              [disabled]="submitting"
+            >
+              Annuler
+            </button>
+          </div>
+
+          <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+        </form>
+      </section>
+    </ng-container>
+
+    <ng-template #guestAvisMessage>
+      <p class="guest-message">
+        Connectez-vous pour ajouter votre avis sur ce film.
+      </p>
+    </ng-template>
+  </div>
+</div>
