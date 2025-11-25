@@ -23,14 +23,36 @@
       </div>
 
       <div class="form-group">
-        <label for="time">Heure</label>
-        <input
-          type="time"
+        <label for="time">Heure de séance</label>
+        <select
           id="time"
           [(ngModel)]="selectedTime"
           name="time"
           required
         >
+          <option value="">Sélectionnez une heure</option>
+          <option *ngFor="let time of availableTimes" [value]="time">
+            {{ time }}
+          </option>
+        </select>
+        <small *ngIf="availableTimes.length > 0" class="help-text">
+          Durée du film : {{ formatRuntime() }} | Horaires disponibles de 10h à 20h
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="cinema">Cinéma</label>
+        <select
+          id="cinema"
+          [(ngModel)]="selectedCinema"
+          name="cinema"
+          required
+        >
+          <option value="">Sélectionnez un cinéma</option>
+          <option *ngFor="let cinema of cinemas" [value]="cinema">
+            {{ cinema }}
+          </option>
+        </select>
       </div>
 
       <div class="message-container" *ngIf="errorMessage || successMessage">

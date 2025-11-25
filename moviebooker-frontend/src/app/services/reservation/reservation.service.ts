@@ -10,6 +10,7 @@ export interface Reservation {
   movieId: number;
   movieName: string;
   date: Date;
+  cinemaName: string;
 }
 
 @Injectable({
@@ -30,10 +31,10 @@ export class ReservationService {
     });
   }
 
-  reserveMovie(movieId: number, movieName: string, date: Date): Observable<Reservation> {
+  reserveMovie(movieId: number, movieName: string, date: Date, cinemaName: string): Observable<Reservation> {
     return this.http.post<Reservation>(
       this.apiUrl,
-      { movieId, movieName, date },
+      { movieId, movieName, date, cinemaName },
       { headers: this.getHeaders() }
     );
   }

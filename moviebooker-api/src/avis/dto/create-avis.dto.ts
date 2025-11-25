@@ -18,7 +18,7 @@ export class CreateAvisDto {
 
   @ApiProperty({
     example: 4.5,
-    description: 'Note attribuée au film (0 à 10)',
+    description: 'Note attribuée au film (0 à 5)',
   })
   @IsNumber()
   @Min(0)

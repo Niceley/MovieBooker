@@ -22,4 +22,11 @@ export class CreateReservationDto {
   })
   @IsDate()
   date: Date;
+
+  @ApiProperty({
+    example: 'Cinéma Pathé',
+    description: 'Nom du cinéma',
+  })
+  @IsString()
+  cinemaName: string;
 }

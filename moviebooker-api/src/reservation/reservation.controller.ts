@@ -34,6 +34,7 @@ export class ReservationController {
         reservationData.movieId,
         reservationData.movieName,
         new Date(reservationData.date),
+        reservationData.cinemaName,
       );
     } catch (error) {
       return error.message;

@@ -32,6 +32,7 @@ model Reservation {
   movieId Int
   movieName String
   date DateTime
+  cinemaName String
 }
 
 model Avis {

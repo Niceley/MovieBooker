@@ -9,6 +9,7 @@ export interface Reservation {
   movieId: number;
   movieName: string;
   date: string;
+  cinemaName: string;
   moviePoster?: string;
 }
 

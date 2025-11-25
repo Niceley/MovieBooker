@@ -39,6 +39,10 @@
           <i class="far fa-calendar-alt"></i>
           {{ formatDate(reservation.date) }}
         </p>
+        <p class="cinema" *ngIf="reservation.cinemaName">
+          <i class="fas fa-building"></i>
+          {{ reservation.cinemaName }}
+        </p>
         
         <div class="actions">
           <button class="btn-cancel" (click)="cancelReservation(reservation.id)">

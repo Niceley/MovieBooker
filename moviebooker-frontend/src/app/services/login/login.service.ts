@@ -19,7 +19,6 @@ export class LoginService {
   userInfo$ = this.userInfoSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    // Initialiser les informations utilisateur si un token existe
     const token = this.getToken();
     if (token) {
       this.updateUserInfo(token);

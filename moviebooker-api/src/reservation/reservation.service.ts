@@ -11,6 +11,7 @@ export class ReservationService {
     movieId: number,
     movieName: string,
     date: Date,
+    cinemaName: string,
   ) {
     const reservationDate = new Date(date);
 
@@ -41,6 +42,7 @@ export class ReservationService {
         movieId: movieId,
         movieName: movieName,
         date: reservationDate,
+        cinemaName: cinemaName,
       },
     });
   }
