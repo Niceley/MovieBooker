@@ -142,7 +142,7 @@
     </ng-template>
   </ng-container>
 
-  <div class="avis-form-wrapper">
+  <div class="avis-form-wrapper" *ngIf="!filterFormHasCriteria() || avisList.length > 0">
     <ng-container *ngIf="isLoggedIn; else guestAvisMessage">
       <section *ngIf="userReview && !isEditing" class="user-review-card">
         <div class="user-review-header">
