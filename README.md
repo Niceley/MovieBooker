@@ -2,11 +2,13 @@
 
 MovieBooker est une application web complète permettant de réserver des places de cinéma. Le projet est divisé en deux parties : une API backend développée avec NestJS et un frontend développé avec Angular.
 
-## 🌐 URLs de Production
+# Contributeur
 
-- Frontend : [https://movie-booker-beta.vercel.app/](https://movie-booker-beta.vercel.app/)
-- Backend API : [https://moviebooker-api.onrender.com/](https://moviebooker-api.onrender.com/)
-- Documentation API (Swagger) : [https://moviebooker-api.onrender.com/documentation](https://moviebooker-api.onrender.com/documentation)
+Ce projet à été fait en groupe avec : 
+
+David W. - 20230637
+Thomas L. - 20230012
+Antoine H. - 20230367
 
 ## 📁 Structure du Projet
 
@@ -77,7 +79,3 @@ Pour plus de détails sur chaque partie du projet, consultez les README spécifi
 - **Frontend** : Angular 19
 - **Backend** : NestJS
 - **Base de données** : PostgreSQL
-- **Documentation API** : Swagger
-- **Déploiement** :
-  - Frontend : Vercel
-  - Backend : Render
