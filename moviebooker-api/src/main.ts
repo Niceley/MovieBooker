@@ -8,7 +8,10 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       process.env.FRONTEND_URL ?? 'http://localhost:4200',
-      'http://localhost:3000',
+      'http://localhost:4200', // Development
+      'http://localhost:80',    // Docker production
+      'http://localhost',       // Docker production (without port)
+      'http://localhost:3000',  // Swagger/API docs
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,

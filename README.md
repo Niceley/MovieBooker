@@ -16,9 +16,37 @@ MovieBooker/
 └── moviebooker-frontend/ # Frontend Angular
 ```
 
+Avant d'initialiser le projet, il faut récupérer une clé API TMDB sur le lien suivant : 
+
+https://www.themoviedb.org/settings/api
+
 ## 🚀 Démarrage Rapide
 
-### Backend (moviebooker-api)
+### Option 1 : Avec Docker (Recommandé) 🐳
+
+La méthode la plus simple pour démarrer le projet est d'utiliser Docker. La seule configuration nécessaire est votre clé API TMDB.
+
+1. **Configurez votre clé API TMDB** :
+   ```bash
+   cp env.example .env
+   # Éditez .env et remplacez your_tmdb_api_key_here par votre vraie clé API
+   ```
+
+2. **Démarrez tous les services** :
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Accédez à l'application** :
+   - Frontend : http://localhost:80
+   - Backend API : http://localhost:3000
+   - Documentation API : http://localhost:3000/documentation
+
+Pour plus de détails, consultez le [Guide Docker](./DOCKER.md).
+
+### Option 2 : Installation Manuelle
+
+#### Backend (moviebooker-api)
 
 ```bash
 cd moviebooker-api
@@ -28,7 +56,7 @@ npm run start:dev
 
 Le serveur backend démarrera sur `http://localhost:3000`
 
-### Frontend (moviebooker-frontend)
+#### Frontend (moviebooker-frontend)
 
 ```bash
 cd moviebooker-frontend
