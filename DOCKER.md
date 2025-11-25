@@ -12,12 +12,6 @@ Ce guide explique comment démarrer le projet MovieBooker avec Docker.
 
 ### 1. Configuration de la clé API TMDB
 
-Créez un fichier `.env` à la racine du projet en copiant le fichier `env.example` :
-
-```bash
-cp env.example .env
-```
-
 Éditez le fichier `.env` et remplacez `your_tmdb_api_key_here` par votre vraie clé API TMDB :
 
 ```env

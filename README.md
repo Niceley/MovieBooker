@@ -28,7 +28,6 @@ La méthode la plus simple pour démarrer le projet est d'utiliser Docker. La se
 
 1. **Configurez votre clé API TMDB** :
    ```bash
-   cp env.example .env
    # Éditez .env et remplacez your_tmdb_api_key_here par votre vraie clé API
    ```
 
