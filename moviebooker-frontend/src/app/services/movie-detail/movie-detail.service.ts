@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -15,8 +15,23 @@ export class MovieDetailService {
     return this.http.get(`${environment.apiUrl}/movie/detail/${id}`);
   }
 
-  getMovieAvis(id: number): Observable<Avis[]> {
-    return this.http.get<Avis[]>(`${environment.apiUrl}/avis/movie/${id}`);
+  getMovieAvis(
+    id: number,
+    filters?: { keyword?: string; note?: number | null }
+  ): Observable<Avis[]> {
+    let params = new HttpParams();
+
+    if (filters?.keyword) {
+      params = params.set('keyword', filters.keyword.trim());
+    }
+
+    if (filters?.note !== undefined && filters?.note !== null && filters.note !== ('' as any)) {
+      params = params.set('note', filters.note.toString());
+    }
+
+    return this.http.get<Avis[]>(`${environment.apiUrl}/avis/movie/${id}`, {
+      params,
+    });
   }
 
   createAvis(payload: {

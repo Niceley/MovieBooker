@@ -22,9 +22,11 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   userReview: Avis | null = null;
   reviewForm: FormGroup;
+  filterForm: FormGroup;
   isEditing = false;
   submitting = false;
   errorMessage: string | null = null;
+  readonly ratingOptions = [5,4.5,4,3.5,3,2.5,2,1.5,1,0.5,0,];
 
   private movieId: number | null = null;
   private userInfoSubscription?: Subscription;
@@ -38,6 +40,10 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
     this.reviewForm = this.fb.group({
       note: [null, [Validators.required, Validators.min(0), Validators.max(5)]],
       commentaire: ['', [Validators.required, Validators.maxLength(1000)]],
+    });
+    this.filterForm = this.fb.group({
+      keyword: [''],
+      note: [''],
     });
   }
 
@@ -73,9 +79,11 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadMovieAvis(movieId: number): void {
+  loadMovieAvis(movieId: number, filters?: { keyword?: string; note?: number }): void {
     this.avisLoading = true;
-    this.movieDetailService.getMovieAvis(movieId).subscribe({
+    const effectiveFilters = filters ?? this.getFilterValues();
+
+    this.movieDetailService.getMovieAvis(movieId, effectiveFilters).subscribe({
       next: (data: Avis[]) => {
         this.avisList = data;
         this.avisLoading = false;
@@ -162,7 +170,7 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
         this.submitting = false;
         this.reviewForm.reset();
         this.isEditing = false;
-        this.loadMovieAvis(this.movieId!);
+        this.loadMovieAvis(this.movieId!, this.getFilterValues());
       },
       error: (error) => {
         this.submitting = false;
@@ -189,7 +197,7 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
         this.submitting = false;
         this.reviewForm.reset();
         this.isEditing = false;
-        this.loadMovieAvis(this.movieId!);
+        this.loadMovieAvis(this.movieId!, this.getFilterValues());
       },
       error: (error) => {
         this.submitting = false;
@@ -200,6 +208,56 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
 
   trackAvisById(_: number, avis: Avis): number {
     return avis.id;
+  }
+
+  applyFilters(): void {
+    if (!this.movieId) {
+      return;
+    }
+    this.loadMovieAvis(this.movieId, this.getFilterValues());
+  }
+
+  resetFilters(): void {
+    this.filterForm.reset({
+      keyword: '',
+      note: '',
+    });
+    this.applyFilters();
+  }
+
+  filterFormHasCriteria(): boolean {
+    if (!this.filterForm) {
+      return false;
+    }
+
+    const keyword = this.filterForm.get('keyword')?.value;
+    const note = this.filterForm.get('note')?.value;
+
+    return (keyword && keyword.trim().length > 0) || note === 0 || !!note;
+  }
+
+  private getFilterValues(): { keyword?: string; note?: number } {
+    if (!this.filterForm) {
+      return {};
+    }
+
+    const keywordRaw = this.filterForm.get('keyword')?.value ?? '';
+    const noteRaw = this.filterForm.get('note')?.value;
+
+    const filters: { keyword?: string; note?: number } = {};
+
+    if (keywordRaw && keywordRaw.trim().length > 0) {
+      filters.keyword = keywordRaw.trim();
+    }
+
+    if (noteRaw !== '' && noteRaw !== null && noteRaw !== undefined) {
+      const parsedNote = Number(noteRaw);
+      if (!Number.isNaN(parsedNote)) {
+        filters.note = parsedNote;
+      }
+    }
+
+    return filters;
   }
 
   private handleUserContextChange(): void {

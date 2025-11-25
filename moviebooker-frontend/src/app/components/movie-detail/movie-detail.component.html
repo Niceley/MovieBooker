@@ -71,6 +71,35 @@
     </div>
   </div>
 
+  <form class="avis-filters" [formGroup]="filterForm" (ngSubmit)="applyFilters()">
+    <div class="filter-field">
+      <label for="keyword">Mot clé</label>
+      <input
+        id="keyword"
+        type="text"
+        formControlName="keyword"
+        placeholder="Rechercher dans les commentaires"
+      />
+    </div>
+
+    <div class="filter-field">
+      <label for="note-filter">Note</label>
+      <select id="note-filter" formControlName="note">
+        <option value="">Toutes les notes</option>
+        <option *ngFor="let rating of ratingOptions" [value]="rating">
+          {{ rating }} étoile{{ rating > 1 ? 's' : '' }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-actions">
+      <button type="submit">Filtrer</button>
+      <button type="button" class="btn-secondary" (click)="resetFilters()">
+        Réinitialiser
+      </button>
+    </div>
+  </form>
+
   <div class="loading-spinner avis-loading" *ngIf="avisLoading">
     <i class="fas fa-spinner fa-spin"></i>
   </div>
@@ -106,7 +135,9 @@
     </div>
     <ng-template #emptyAvis>
       <p class="empty-state">
-        Soyez le premier à donner votre avis sur le film !
+        {{ filterFormHasCriteria()
+            ? "Aucun avis n'a été trouvé."
+            : "Soyez le premier à donner votre avis sur le film !" }}
       </p>
     </ng-template>
   </ng-container>

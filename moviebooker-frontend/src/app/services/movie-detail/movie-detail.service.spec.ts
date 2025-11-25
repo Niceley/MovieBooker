@@ -38,6 +38,15 @@ describe('MovieDetailService', () => {
     req.flush({});
   });
 
+  it('should fetch movie avis with filters', () => {
+    service.getMovieAvis(2, { keyword: 'hero', note: 4 }).subscribe();
+    const req = httpMock.expectOne(
+      `${environment.apiUrl}/avis/movie/2?keyword=hero&note=4`
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush([]);
+  });
+
   it('should create avis with auth header', () => {
     service
       .createAvis({ movieId: 1, movieName: 'Test', note: 4, commentaire: 'Bien' })

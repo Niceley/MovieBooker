@@ -58,6 +58,7 @@ describe('AvisService', () => {
         id: 1,
         userId: mockUser.id,
         ...payload,
+        user: { firstName: mockUser.firstName, lastName: mockUser.lastName },
       });
 
       const result = await service.createAvis(mockUser as any, payload);
@@ -66,8 +67,13 @@ describe('AvisService', () => {
         id: 1,
         userId: mockUser.id,
         ...payload,
+        userFirstName: mockUser.firstName,
+        userLastName: mockUser.lastName,
       });
-      expect(mockPrismaService.avis.create).toHaveBeenCalled();
+      expect(mockPrismaService.avis.create).toHaveBeenCalledWith({
+        data: { userId: mockUser.id, ...payload },
+        include: expect.any(Object),
+      });
     });
 
     it('throws if avis already exists for movie', async () => {
@@ -81,30 +87,60 @@ describe('AvisService', () => {
 
   describe('getUserAvis', () => {
     it('returns avis for user', async () => {
-      const avisList = [{ id: 1 }];
+      const avisList = [
+        { id: 1, user: { firstName: mockUser.firstName, lastName: mockUser.lastName } },
+      ];
       mockPrismaService.avis.findMany.mockResolvedValue(avisList);
 
       const result = await service.getUserAvis(mockUser as any);
 
-      expect(result).toEqual(avisList);
+      expect(result).toEqual([
+        {
+          id: 1,
+          userFirstName: mockUser.firstName,
+          userLastName: mockUser.lastName,
+        },
+      ]);
       expect(mockPrismaService.avis.findMany).toHaveBeenCalledWith({
         where: { userId: mockUser.id },
         orderBy: { updatedAt: 'desc' },
+        include: expect.any(Object),
       });
     });
   });
 
   describe('getAvisByMovie', () => {
     it('returns avis for movie', async () => {
-      const avisList = [{ id: 1, movieId: 42 }];
+      const avisList = [
+        { id: 1, movieId: 42, user: { firstName: 'Jane', lastName: 'Doe' } },
+      ];
       mockPrismaService.avis.findMany.mockResolvedValue(avisList);
 
       const result = await service.getAvisByMovie(42);
 
-      expect(result).toEqual(avisList);
+      expect(result).toEqual([
+        { id: 1, movieId: 42, userFirstName: 'Jane', userLastName: 'Doe' },
+      ]);
       expect(mockPrismaService.avis.findMany).toHaveBeenCalledWith({
         where: { movieId: 42 },
         orderBy: { updatedAt: 'desc' },
+        include: expect.any(Object),
+      });
+    });
+
+    it('applies filters when provided', async () => {
+      mockPrismaService.avis.findMany.mockResolvedValue([]);
+
+      await service.getAvisByMovie(10, { keyword: 'test', note: 4 });
+
+      expect(mockPrismaService.avis.findMany).toHaveBeenCalledWith({
+        where: {
+          movieId: 10,
+          commentaire: { contains: 'test', mode: 'insensitive' },
+          note: 4,
+        },
+        orderBy: { updatedAt: 'desc' },
+        include: expect.any(Object),
       });
     });
   });
@@ -113,11 +149,20 @@ describe('AvisService', () => {
     it('updates avis when owned by user', async () => {
       const avis = { id: 1, userId: mockUser.id };
       mockPrismaService.avis.findUnique.mockResolvedValue(avis);
-      mockPrismaService.avis.update.mockResolvedValue({ ...avis, note: 5 });
+      mockPrismaService.avis.update.mockResolvedValue({
+        ...avis,
+        note: 5,
+        user: { firstName: mockUser.firstName, lastName: mockUser.lastName },
+      });
 
       const result = await service.updateAvis(1, mockUser as any, { note: 5 });
 
-      expect(result).toEqual({ ...avis, note: 5 });
+      expect(result).toEqual({
+        ...avis,
+        note: 5,
+        userFirstName: mockUser.firstName,
+        userLastName: mockUser.lastName,
+      });
       expect(mockPrismaService.avis.update).toHaveBeenCalled();
     });
 

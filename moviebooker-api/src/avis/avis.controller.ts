@@ -6,9 +6,16 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User as UserEntity } from '@prisma/client';
 import { User } from 'src/shared/decorator';
@@ -22,9 +29,30 @@ export class AvisController {
   constructor(private readonly avisService: AvisService) {}
 
   @ApiOperation({ summary: 'Afficher les avis pour un film' })
+  @ApiQuery({
+    name: 'keyword',
+    required: false,
+    description: 'Filtrer sur un mot clé présent dans le commentaire',
+  })
+  @ApiQuery({
+    name: 'note',
+    required: false,
+    description: 'Filtrer sur une note exacte (0 à 5)',
+    type: Number,
+  })
   @Get('movie/:movieId')
-  getAvisByMovie(@Param('movieId') movieId: string) {
-    return this.avisService.getAvisByMovie(Number(movieId));
+  getAvisByMovie(
+    @Param('movieId') movieId: string,
+    @Query('keyword') keyword?: string,
+    @Query('note') note?: string,
+  ) {
+    const parsedNote = note !== undefined ? Number(note) : undefined;
+    const safeNote = parsedNote !== undefined && !Number.isNaN(parsedNote) ? parsedNote : undefined;
+
+    return this.avisService.getAvisByMovie(Number(movieId), {
+      keyword,
+      note: safeNote,
+    });
   }
 
   @UseGuards(JwtAuthGuard)

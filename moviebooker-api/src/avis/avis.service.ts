@@ -1,6 +1,6 @@
 import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User } from '@prisma/client';
+import { Avis, Prisma, User } from '@prisma/client';
 import { CreateAvisDto } from './dto/create-avis.dto';
 import { UpdateAvisDto } from './dto/update-avis.dto';
 
@@ -14,7 +14,6 @@ export class AvisService {
       },
     },
   };
-
   constructor(private readonly prisma: PrismaService) {}
 
   async createAvis(user: User, data: CreateAvisDto) {
@@ -51,9 +50,27 @@ export class AvisService {
     return avisList.map((avis) => this.formatAvis(avis));
   }
 
-  async getAvisByMovie(movieId: number) {
+  async getAvisByMovie(
+    movieId: number,
+    filters?: { keyword?: string; note?: number },
+  ) {
+    const where: Prisma.AvisWhereInput = {
+      movieId,
+    };
+
+    if (filters?.keyword) {
+      where.commentaire = {
+        contains: filters.keyword,
+        mode: 'insensitive',
+      };
+    }
+
+    if (filters?.note !== undefined && filters?.note !== null) {
+      where.note = filters.note;
+    }
+
     const avisList = await this.prisma.avis.findMany({
-      where: { movieId },
+      where,
       orderBy: { updatedAt: 'desc' },
       include: this.avisInclude,
     });
@@ -95,7 +112,9 @@ export class AvisService {
     return { message: 'Avis supprimé' };
   }
 
-  private formatAvis(avis: any) {
+  private formatAvis(
+    avis: Avis & { user?: { firstName: string | null; lastName: string | null } | null },
+  ) {
     const { user, ...rest } = avis;
     return {
       ...rest,
